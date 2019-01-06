@@ -5,28 +5,35 @@
 
 //% weight=100 color=#0fbc11 icon=""
 enum GamepadButton {
-    //% block="Down"
-    P8 = <number>DAL.MICROBIT_ID_IO_P8,
-    //% block="Right"
-    P12 = <number>DAL.MICROBIT_ID_IO_P12,
     //% block="Up"
-    P13 = <number>DAL.MICROBIT_ID_IO_P13,
+    Up = EventBusSource.MICROBIT_ID_IO_P13,
     //% block="Left"
-    P15 = <number>DAL.MICROBIT_ID_IO_P15
+    Left = EventBusSource.MICROBIT_ID_IO_P15,
+    //% block="Down"
+    Down = EventBusSource.MICROBIT_ID_IO_P8,
+    //% block="Right"
+    Right = EventBusSource.MICROBIT_ID_IO_P12
 }
 enum GamepadEvents {
     //% block="pressed"
-    Down = DAL.MICROBIT_BUTTON_EVT_DOWN,
+    Down = EventBusValue.MICROBIT_BUTTON_EVT_DOWN,
     //% block="released"
-    Up = DAL.MICROBIT_BUTTON_EVT_UP
+    Up = EventBusValue.MICROBIT_BUTTON_EVT_UP
 }
 namespace Gamepad {
+    function init():void{
+        return
+    }
     let initflag: number = 0
-    function init(): void {
+    function pininit(): void {
         pins.setPull(DigitalPin.P8, PinPullMode.PullUp)
         pins.setPull(DigitalPin.P12, PinPullMode.PullUp)
         pins.setPull(DigitalPin.P13, PinPullMode.PullUp)
         pins.setPull(DigitalPin.P15, PinPullMode.PullUp)
+        pins.digitalReadPin(DigitalPin.P8)
+        pins.digitalReadPin(DigitalPin.P12)
+        pins.digitalReadPin(DigitalPin.P13)
+        pins.digitalReadPin(DigitalPin.P15)
         initflag = 1
     }
     /**
@@ -35,8 +42,8 @@ namespace Gamepad {
      */
     //% blockId=Gamepad_Button_Sence block="Button|%Button|Is Pressed"
     export function ButtonState(Button: GamepadButton): boolean {
-        if (initflag == 0) init()
-        return (pins.digitalReadPin(<number>Button) == 0) ? true : false
+        if (initflag == 0) pininit()
+        return (pins.digitalReadPin(Button>>0) == 0) ? true : false
     }
     /**
      * TODO: ボタンが押されたとき
@@ -46,7 +53,8 @@ namespace Gamepad {
      */
     //% blockId=Gamepad_create_event block="on Button|%Button|Is %Event"
     export function onEvent(Button: GamepadButton,Event:GamepadEvents, handler: Action) {
-        if (initflag == 0) init()
-        control.onEvent(<number>Button,<number>Event, handler);
+        init()
+        if (initflag == 0) pininit()
+        control.onEvent(Button>>0,Event>>0, handler);
     }
 }
