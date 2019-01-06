@@ -16,21 +16,23 @@ enum GamepadButton {
 }
 enum GamepadEvents {
     //% block="pressed"
-    Down = EventBusValue.MICROBIT_BUTTON_EVT_CLICK,
+    Down = EventBusValue.MICROBIT_BUTTON_EVT_DOWN,
     //% block="released"
-    Up = EventBusValue.MICROBIT_BUTTON_EVT_UP
+    Up = EventBusValue.MICROBIT_BUTTON_EVT_UP,
+    //% block="click"
+    Click = EventBusValue.MICROBIT_BUTTON_EVT_CLICK
 }
 namespace Gamepad {
     let initflag: number = 0
     function pininit(): void {
-        pins.setPull(DigitalPin.P8, PinPullMode.PullNone)
-        pins.setPull(DigitalPin.P12, PinPullMode.PullNone)
-        pins.setPull(DigitalPin.P13, PinPullMode.PullNone)
-        pins.setPull(DigitalPin.P15, PinPullMode.PullNone)
-        pins.setEvents(DigitalPin.P8, PinEventType.Edge)
-        pins.setEvents(DigitalPin.P12, PinEventType.Edge)
-        pins.setEvents(DigitalPin.P13, PinEventType.Edge)
-        pins.setEvents(DigitalPin.P15, PinEventType.Edge)
+        pins.setPull(DigitalPin.P8, PinPullMode.PullUp)
+        pins.setPull(DigitalPin.P12, PinPullMode.PullUp)
+        pins.setPull(DigitalPin.P13, PinPullMode.PullUp)
+        pins.setPull(DigitalPin.P15, PinPullMode.PullUp)
+        pins.setEvents(DigitalPin.P8, PinEventType.Touch)
+        pins.setEvents(DigitalPin.P12, PinEventType.Touch)
+        pins.setEvents(DigitalPin.P13, PinEventType.Touch)
+        pins.setEvents(DigitalPin.P15, PinEventType.Touch)
         initflag = 1
     }
     /**
