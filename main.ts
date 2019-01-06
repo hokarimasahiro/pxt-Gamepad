@@ -5,22 +5,20 @@
 
 //% weight=100 color=#0fbc11 icon=""
 enum GamepadButton {
-    //% block="Down Allow"
-    Down = DAL.MICROBIT_ID_IO_P8,
-    //% block="Right Allow"
-    Right = DAL.MICROBIT_ID_IO_P12,
-    //% block="Up Allow"
-    Up = DAL.MICROBIT_ID_IO_P13,
-    //% block="Left Allow"
-    Left = DAL.MICROBIT_ID_IO_P15
+    //% block="Down"
+    P8 = <number>DAL.MICROBIT_ID_IO_P8,
+    //% block="Right"
+    P12 = <number>DAL.MICROBIT_ID_IO_P12,
+    //% block="Up"
+    P13 = <number>DAL.MICROBIT_ID_IO_P13,
+    //% block="Left"
+    P15 = <number>DAL.MICROBIT_ID_IO_P15
 }
 enum GamepadEvents {
     //% block="pressed"
     Down = DAL.MICROBIT_BUTTON_EVT_DOWN,
     //% block="released"
-    Up = DAL.MICROBIT_BUTTON_EVT_UP,
-    //% block="click"
-    Click = DAL.MICROBIT_BUTTON_EVT_CLICK,
+    Up = DAL.MICROBIT_BUTTON_EVT_UP
 }
 namespace Gamepad {
     let initflag: number = 0
@@ -35,8 +33,8 @@ namespace Gamepad {
      * TODO: ボタンの状態を通知する
      * @param Button ボタン。, eg: Down Allow
      */
-    //% blockId=Gamepad_Button_Sence block="Button Is Pressed|%Button"
-    export function ButtonIsPressed(Button: GamepadButton): boolean {
+    //% blockId=Gamepad_Button_Sence block="Button|%Button|Is Pressed"
+    export function ButtonState(Button: GamepadButton): boolean {
         if (initflag == 0) init()
         return (pins.digitalReadPin(<number>Button) == 0) ? true : false
     }
@@ -46,8 +44,8 @@ namespace Gamepad {
      * @param Event きっかけ。, eg: pressed
      * @param handler 処理。
      */
-    //% blockId=Gamepad_create_event block="on Button|%Button|%Event"
-    export function onButton(Button: GamepadButton,Event:GamepadEvents, handler: Action) {
+    //% blockId=Gamepad_create_event block="on Button|%Button|Is %Event"
+    export function onEvent(Button: GamepadButton,Event:GamepadEvents, handler: Action) {
         if (initflag == 0) init()
         control.onEvent(<number>Button,<number>Event, handler);
     }
