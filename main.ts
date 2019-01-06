@@ -3,7 +3,7 @@
  * Read more at https://makecode.microbit.org/blocks/custom
  */
 
-//% weight=100 color=#0fbc11 icon="\uf11b" block="Game Pad"
+//% weight=10 color=#0fbc11 icon="\uf11b" block="Gamepad"
 enum GamepadButton {
     //% block="Up"
     Up = EventBusSource.MICROBIT_ID_IO_P13,
