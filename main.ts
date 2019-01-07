@@ -3,7 +3,6 @@
  * Read more at https://makecode.microbit.org/blocks/custom
  */
 
-//% weight=10 color=#0fbc11 icon="\uf11b" block="Gamepad"
 enum GamepadButton {
     //% block="Up"
     Up = EventBusSource.MICROBIT_ID_IO_P13,
@@ -22,6 +21,7 @@ enum GamepadEvents {
     //% block="click"
     Click = EventBusValue.MICROBIT_BUTTON_EVT_CLICK
 }
+//% weight=10 color=#0fbc11 icon="\uf11b" block="Gamepad"
 namespace Gamepad {
     let initflag: number = 0
     function pininit(): void {
