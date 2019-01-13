@@ -2,7 +2,6 @@
  * Use this file to define custom functions and blocks.
  * Read more at https://makecode.microbit.org/blocks/custom
  */
-
 enum GamepadButton {
     //% block="Up"
     Up = EventBusSource.MICROBIT_ID_IO_P13,
@@ -20,6 +19,12 @@ enum GamepadEvents {
     Up = EventBusValue.MICROBIT_BUTTON_EVT_UP,
     //% block="click"
     Click = EventBusValue.MICROBIT_BUTTON_EVT_CLICK
+}
+enum GAmepadJoystick{
+    // % block="X"
+    x=0,
+    // % block="Y"
+    y=1
 }
 //% weight=10 color=#0fbc11 icon="\uf11b" block="Gamepad"
 namespace Gamepad {
@@ -54,5 +59,18 @@ namespace Gamepad {
     export function onEvent(Button: GamepadButton, Event: GamepadEvents, handler: Action) {
         if (initflag == 0) pininit()
         control.onEvent(Button >> 0, Event >> 0, handler);
+    }
+    /**
+     * TODO: ジョイスチックの位置を取り出す
+     * @param axis 軸方向。, eg: x
+     */
+    //% blockId=Gamepad_create_event block="Get Joystick|%axis| travel"
+    export function JoyStick(axis:GAmepadJoystick):number {
+        if(axis==GAmepadJoystick.x){
+            return Math.trunc((pins.analogReadPin(AnalogPin.P1)-511.5) /2)
+        }else{
+            return Math.trunc((pins.analogReadPin(AnalogPin.P2) - 511.5) / 2)
+        }
+        return 0
     }
 }
