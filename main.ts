@@ -29,6 +29,7 @@ enum GamepadJoystick {
 //% weight=10 color=#0fbc11 icon="\uf11b" block="Gamepad"
 namespace Gamepad {
     let initflag: number = 0
+    let zerolimit=5
     function pininit(): void {
         pins.setPull(DigitalPin.P8, PinPullMode.PullUp)
         pins.setPull(DigitalPin.P12, PinPullMode.PullUp)
@@ -64,14 +65,26 @@ namespace Gamepad {
      * TODO: ジョイスチックの位置を取り出す
      * @param axis 軸方向。, eg: x
      */
-    //% blockId=Gamepad_create_event block="Get Joystick|%axis| travel"
+    //% blockId=Gamepad_get_joystick block="Get Joystick|%axis| travel"
     export function JoyStick(axis: GamepadJoystick): number {
         if (axis == GamepadJoystick.x) {
-            return Math.trunc((pins.analogReadPin(AnalogPin.P1) - 511.5) / 2)
+            const JoystickX = pins.analogReadPin(AnalogPin.P1) - 511.5
+            if (Math.abs(JoystickX)<zerolimit) return 0
+            else return Math.trunc(JoystickX / 2)
         } else {
-            return Math.trunc((pins.analogReadPin(AnalogPin.P2) - 511.5) / 2)
+            const JoystickY = 511.5 - pins.analogReadPin(AnalogPin.P2)
+            if (Math.abs(JoystickY) < zerolimit) return 0
+            else return Math.trunc(JoystickY / 2)
         }
         return 0
+    }
+    /**
+     * TODO: ジョイスチックのゼロ位置を設定する
+     * @param zero ゼロと認識する範囲。, eg: 5
+     */
+    //% blockId=Gamepad_set_zero_limit block="Set zero limit to |%zero|"
+    export function setZeroLimit(zero:number):void{
+        zerolimit=zero
     }
     /**
      * TODO: ジョイスティックが動いたとき
