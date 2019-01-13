@@ -20,11 +20,11 @@ enum GamepadEvents {
     //% block="click"
     Click = EventBusValue.MICROBIT_BUTTON_EVT_CLICK
 }
-enum GAmepadJoystick{
+enum GamepadJoystick {
     // % block="X"
-    x=0,
+    x = 0,
     // % block="Y"
-    y=1
+    y = 1
 }
 //% weight=10 color=#0fbc11 icon="\uf11b" block="Gamepad"
 namespace Gamepad {
@@ -65,12 +65,42 @@ namespace Gamepad {
      * @param axis 軸方向。, eg: x
      */
     //% blockId=Gamepad_create_event block="Get Joystick|%axis| travel"
-    export function JoyStick(axis:GAmepadJoystick):number {
-        if(axis==GAmepadJoystick.x){
-            return Math.trunc((pins.analogReadPin(AnalogPin.P1)-511.5) /2)
-        }else{
+    export function JoyStick(axis: GamepadJoystick): number {
+        if (axis == GamepadJoystick.x) {
+            return Math.trunc((pins.analogReadPin(AnalogPin.P1) - 511.5) / 2)
+        } else {
             return Math.trunc((pins.analogReadPin(AnalogPin.P2) - 511.5) / 2)
         }
         return 0
+    }
+    /**
+     * TODO: ジョイスティックが動いたとき
+     * @param axis 軸方向。, eg: x
+     * @param handler 処理。
+     */
+    //% blockId=Gamepad_create_event block="on Joystick Move on |%axis| axis"
+    export function onJoistick(axis:GamepadJoystick, handler: Action) {
+        let JoystickEventId=0x4100
+        let lastJoystickX:number
+        let lastJoystickY:number
+        control.onEvent(JoystickEventId, axis, handler);
+        if (initflag==0) {
+            pininit();
+            control.inBackground(() => {
+                while (true) {
+                    const JoystickX = pins.analogReadPin(AnalogPin.P1);
+                    if (JoystickX != lastJoystickX) {
+                        lastJoystickX = JoystickX;
+                        control.raiseEvent(JoystickEventId, GamepadJoystick.x);
+                    }
+                    const JoystickY = pins.analogReadPin(AnalogPin.P2);
+                    if (JoystickY != lastJoystickY) {
+                        lastJoystickY = JoystickY;
+                        control.raiseEvent(JoystickEventId, GamepadJoystick.y);
+                    }
+                    basic.pause(50);
+                }
+            })
+        }
     }
 }
