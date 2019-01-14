@@ -29,7 +29,7 @@ enum GamepadJoystick {
 //% weight=10 color=#0fbc11 icon="\uf11b" block="Gamepad"
 namespace Gamepad {
     let initflag: number = 0
-    let joystickResolution=128
+    let joystickStep=128
     function pininit(): void {
         pins.setPull(DigitalPin.P8, PinPullMode.PullUp)
         pins.setPull(DigitalPin.P12, PinPullMode.PullUp)
@@ -69,20 +69,20 @@ namespace Gamepad {
     export function JoyStick(axis: GamepadJoystick): number {
         if (axis == GamepadJoystick.x) {
             const JoystickX = pins.analogReadPin(AnalogPin.P1) - 512
-            return Math.trunc(JoystickX / joystickResolution) * joystickResolution
+            return Math.trunc(JoystickX / joystickStep) * joystickStep
         } else {
             const JoystickY = pins.analogReadPin(AnalogPin.P2) - 512
-            return Math.trunc(JoystickY / joystickResolution) * joystickResolution
+            return Math.trunc(JoystickY / joystickStep) * joystickStep
         }
         return 0
     }
     /**
      * TODO: ジョイスチックの分解能を設定する
-     * @param reso 分解能。, eg: 128
+     * @param reso 分解能。, eg: 32
      */
     //% blockId=Gamepad_set_zero_limit block="Set resolution to |%reso|"
     export function setResolution(reso:number):void{
-        joystickResolution=reso
+        joystickStep=(1024 / reso) >> 0
     }
     /**
      * TODO: ジョイスティックが動いたとき
