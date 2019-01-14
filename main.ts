@@ -92,19 +92,19 @@ namespace Gamepad {
     //% blockId=Gamepad_create_event block="on Joystick Move on |%axis| axis"
     export function onJoistick(axis:GamepadJoystick, handler: Action) {
         let JoystickEventId=0x4100
-        let lastJoystickX:number
-        let lastJoystickY:number
+        let lastJoystickX: number = JoyStick(GamepadJoystick.x)
+        let lastJoystickY: number = JoyStick(GamepadJoystick.y)
         control.onEvent(JoystickEventId, axis, handler);
         if (initflag==0) {
             pininit();
             control.inBackground(() => {
                 while (true) {
-                    const JoystickX = pins.analogReadPin(AnalogPin.P1);
+                    const JoystickX = JoyStick(GamepadJoystick.x)
                     if (JoystickX != lastJoystickX) {
                         lastJoystickX = JoystickX;
                         control.raiseEvent(JoystickEventId, GamepadJoystick.x);
                     }
-                    const JoystickY = pins.analogReadPin(AnalogPin.P2);
+                    const JoystickY = JoyStick(GamepadJoystick.y)
                     if (JoystickY != lastJoystickY) {
                         lastJoystickY = JoystickY;
                         control.raiseEvent(JoystickEventId, GamepadJoystick.y);
