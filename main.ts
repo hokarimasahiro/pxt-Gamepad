@@ -68,10 +68,10 @@ namespace Gamepad {
     //% blockId=Gamepad_get_joystick block="Get Joystick|%axis| travel"
     export function JoyStick(axis: GamepadJoystick): number {
         if (axis == GamepadJoystick.x) {
-            const JoystickX = pins.analogReadPin(AnalogPin.P1) - 512
+            const JoystickX = pins.analogReadPin(AnalogPin.P1) - 511.5
             return Math.trunc(JoystickX / joystickStep / 2) * joystickStep
         } else {
-            const JoystickY = pins.analogReadPin(AnalogPin.P2) - 512
+            const JoystickY = pins.analogReadPin(AnalogPin.P2) - 511.5
             return Math.trunc(JoystickY / joystickStep / 2) * joystickStep
         }
         return 0
