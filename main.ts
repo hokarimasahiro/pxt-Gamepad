@@ -29,12 +29,12 @@ enum GamepadJoystick {
 //% weight=10 color=#0fbc11 icon="\uf11b" block="Gamepad"
 namespace Gamepad {
     let initflag: number = 0
-    let joystickStep=128
+    let joystickStep = 128
     function pininit(): void {
-        pins.setPull(DigitalPin.P8, PinPullMode.PullUp)
-        pins.setPull(DigitalPin.P12, PinPullMode.PullUp)
-        pins.setPull(DigitalPin.P13, PinPullMode.PullUp)
-        pins.setPull(DigitalPin.P15, PinPullMode.PullUp)
+        pins.setPull(DigitalPin.P8, PinPullMode.PullNone)
+        pins.setPull(DigitalPin.P12, PinPullMode.PullNone)
+        pins.setPull(DigitalPin.P13, PinPullMode.PullNone)
+        pins.setPull(DigitalPin.P15, PinPullMode.PullNone)
         pins.setEvents(DigitalPin.P8, PinEventType.Touch)
         pins.setEvents(DigitalPin.P12, PinEventType.Touch)
         pins.setEvents(DigitalPin.P13, PinEventType.Touch)
@@ -81,8 +81,8 @@ namespace Gamepad {
      * @param reso 分解能。, eg: 32
      */
     //% blockId=Gamepad_set_zero_limit block="Set resolution to |%reso|"
-    export function setResolution(reso:number):void{
-        joystickStep=(1024 / reso) >> 0
+    export function setResolution(reso: number): void {
+        joystickStep = (512 / reso) >> 0
     }
     /**
      * TODO: ジョイスティックが動いたとき
@@ -90,12 +90,12 @@ namespace Gamepad {
      * @param handler 処理。
      */
     //% blockId=Gamepad_create_event block="on Joystick Move on |%axis| axis"
-    export function onJoistick(axis:GamepadJoystick, handler: Action) {
-        let JoystickEventId=0x4100
+    export function onJoistick(axis: GamepadJoystick, handler: Action) {
+        let JoystickEventId = 0x4100
         let lastJoystickX: number = JoyStick(GamepadJoystick.x)
         let lastJoystickY: number = JoyStick(GamepadJoystick.y)
         control.onEvent(JoystickEventId, axis, handler);
-        if (initflag==0) {
+        if (initflag == 0) {
             pininit();
             control.inBackground(() => {
                 while (true) {
