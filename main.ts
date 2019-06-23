@@ -51,6 +51,15 @@ namespace Gamepad {
         return (pins.digitalReadPin(Button >> 0) == 0) ? true : false
     }
     /**
+     * TODO: ボタンの状態を0か1で通知する
+     * @param Button ボタン。, eg: Down Allow
+     */
+    //% blockId=Gamepad_Button_Sence block="Button|%Button| Status"
+    export function ButtonState2(Button: GamepadButton): number {
+        if (initflag == 0) pininit()
+        return pins.digitalReadPin(Button >> 0)
+    }
+    /**
      * TODO: ボタンが押されたとき
      * @param Button ボタン。, eg: Down Allow
      * @param Event きっかけ。, eg: pressed
