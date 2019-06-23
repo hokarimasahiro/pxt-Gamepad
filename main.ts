@@ -99,7 +99,7 @@ namespace Gamepad {
      * @param handler 処理。
      */
     //% blockId=Gamepad_create_event block="on Joystick Move on |%axis| axis"
-    export function onJoistick(axis: GamepadJoystick, handler: Action) {
+    export function onJoystick(axis: GamepadJoystick, handler: Action) {
         let JoystickEventId = 0x4100
         let lastJoystickX: number = JoyStick(GamepadJoystick.x)
         let lastJoystickY: number = JoyStick(GamepadJoystick.y)
