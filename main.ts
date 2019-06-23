@@ -54,7 +54,7 @@ namespace Gamepad {
      * TODO: ボタンの状態を0か1で通知する
      * @param Button ボタン。, eg: Down Allow
      */
-    //% blockId=Gamepad_Button_Sence block="Button|%Button| Status"
+    //% blockId=Gamepad_Button_Sence block2="Button %Button Status"
     export function ButtonState2(Button: GamepadButton): number {
         if (initflag == 0) pininit()
         return pins.digitalReadPin(Button >> 0)
