@@ -53,6 +53,10 @@ namespace gamepad {
             pinAssign.push(DigitalPin.P8)
             pinAssign.push(DigitalPin.P12)
         }
+        pins.setPull(pinAssign[0], PinPullMode.PullUp)
+        pins.setPull(pinAssign[1], PinPullMode.PullUp)
+        pins.setPull(pinAssign[2], PinPullMode.PullUp)
+        pins.setPull(pinAssign[3], PinPullMode.PullUp)
         pins.setEvents(pinAssign[0], PinEventType.Touch)
         pins.setEvents(pinAssign[1], PinEventType.Touch)
         pins.setEvents(pinAssign[2], PinEventType.Touch)
