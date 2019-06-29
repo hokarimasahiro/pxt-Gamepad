@@ -38,6 +38,7 @@ namespace gamepad {
     let pinAssign: number[]
     let initflag: number = 0
     let joystickStep = 128
+    let joystickPlay = 10
 
     function pinInit(): void {
         if (gpType == Gamepadtype.joystick) {
@@ -93,27 +94,37 @@ namespace gamepad {
         control.onEvent(pinAssign[Button >> 0], Event >> 0, handler);
     }
     /**
-     * TODO: ジョイスチックの位置を取り出す
+     * TODO: ジョイスティックの位置を取り出す
      * @param axis 軸方向。, eg: x
      */
     //% blockId=Gamepad_get_joystick block="Get Joystick|%axis| travel"
     export function JoyStick(axis: GamepadJoystick): number {
         if (axis == GamepadJoystick.x) {
-            const JoystickX = pins.analogReadPin(AnalogPin.P1) - 511.5
-            return Math.trunc(JoystickX / joystickStep / 2) * joystickStep
+            let deg = pins.analogReadPin(AnalogPin.P1)
+            if(Math.abs(deg - (1023 / 2)) < joystickPlay) return 0;
+            else return (deg - (1023 / 2)) >> 0;
         } else {
-            const JoystickY = pins.analogReadPin(AnalogPin.P2) - 511.5
-            return Math.trunc(JoystickY / joystickStep / 2) * joystickStep
+            let deg = pins.analogReadPin(AnalogPin.P2)
+            if (Math.abs(deg - (1023 / 2)) < joystickPlay) return 0;
+            else return (deg - (1023 / 2)) >> 0;
         }
         return 0
     }
     /**
-     * TODO: ジョイスチックの分解能を設定する
+     * TODO: ジョイスティックの分解能を設定する
      * @param reso 分解能。, eg: 32
      */
     //% blockId=Gamepad_set_zero_limit block="Set resolution to |%reso|"
     export function setResolution(reso: number): void {
         joystickStep = (512 / reso) >> 0
+    }
+    /**
+     * TODO: ジョイスティックの遊びを設定する
+     * @param play 遊び。, eg: 10
+     */
+    //% blockId=Gamepad_set_zero_limit block="Set resolution to |%reso|"
+    export function setPlay(play: number): void {
+        joystickPlay = play >> 0
     }
     /**
      * TODO: ジョイスティックが動いたとき
