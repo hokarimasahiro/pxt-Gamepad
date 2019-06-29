@@ -2,15 +2,21 @@
  * Use this file to define custom functions and blocks.
  * Read more at https://makecode.microbit.org/blocks/custom
  */
+enum Gamepadtype {
+    // % block="original gamepad"
+    original = 0,
+    // % block="joystick"
+    joystick = 1
+}
 enum GamepadButton {
     //% block="Up"
-    Up = EventBusSource.MICROBIT_ID_IO_P13,
+    Up = 0,
     //% block="Left"
-    Left = EventBusSource.MICROBIT_ID_IO_P15,
+    Left = 1,
     //% block="Down"
-    Down = EventBusSource.MICROBIT_ID_IO_P8,
+    Down = 2,
     //% block="Right"
-    Right = EventBusSource.MICROBIT_ID_IO_P12
+    Right = 3
 }
 enum GamepadEvents {
     //% block="pressed"
@@ -27,19 +33,42 @@ enum GamepadJoystick {
     y = 1
 }
 //% weight=10 color=#0fbc11 icon="\uf11b" block="Gamepad"
-namespace Gamepad {
+namespace gamepad {
+    let gamepadType=0   //0:origial, 1:joystick
+    let pinAssign:number[]
     let initflag: number = 0
     let joystickStep = 128
-    function pininit(): void {
-        pins.setPull(DigitalPin.P8, PinPullMode.PullNone)
-        pins.setPull(DigitalPin.P12, PinPullMode.PullNone)
-        pins.setPull(DigitalPin.P13, PinPullMode.PullNone)
-        pins.setPull(DigitalPin.P15, PinPullMode.PullNone)
-        pins.setEvents(DigitalPin.P8, PinEventType.Touch)
-        pins.setEvents(DigitalPin.P12, PinEventType.Touch)
-        pins.setEvents(DigitalPin.P13, PinEventType.Touch)
-        pins.setEvents(DigitalPin.P15, PinEventType.Touch)
+
+    function pinInit(): void {
+        if(gamepadType==0){
+            pinAssign[0] = EventBusSource.MICROBIT_ID_IO_P13
+            pinAssign[1] = EventBusSource.MICROBIT_ID_IO_P15
+            pinAssign[2] = EventBusSource.MICROBIT_ID_IO_P8
+            pinAssign[3] = EventBusSource.MICROBIT_ID_IO_P12
+            pins.setEvents(DigitalPin.P8, PinEventType.Touch)
+            pins.setEvents(DigitalPin.P12, PinEventType.Touch)
+            pins.setEvents(DigitalPin.P13, PinEventType.Touch)
+            pins.setEvents(DigitalPin.P15, PinEventType.Touch)
+        } else{
+            pinAssign[0] = EventBusSource.MICROBIT_ID_IO_P13
+            pinAssign[1] = EventBusSource.MICROBIT_ID_IO_P12
+            pinAssign[2] = EventBusSource.MICROBIT_ID_IO_P15
+            pinAssign[3] = EventBusSource.MICROBIT_ID_IO_P14
+            pins.setEvents(DigitalPin.P12, PinEventType.Touch)
+            pins.setEvents(DigitalPin.P13, PinEventType.Touch)
+            pins.setEvents(DigitalPin.P14, PinEventType.Touch)
+            pins.setEvents(DigitalPin.P15, PinEventType.Touch)
+        }
         initflag = 1
+    }
+    /**
+     * TODO: ゲームパッドのタイプを設定する
+     * @param gtype タイプ。, eg: oroginal
+     */
+    //% blockId=init gamepad block="init type=|%btype|"
+    export function init(gtype: Gamepadtype): void {
+        gamepadType=gtype
+        pinInit()
     }
     /**
      * TODO: ボタンの状態を通知する
@@ -47,8 +76,8 @@ namespace Gamepad {
      */
     //% blockId=Gamepad_Button_Sence block="Button|%Button|Is Pressed"
     export function ButtonState(Button: GamepadButton): boolean {
-        if (initflag == 0) pininit()
-        return (pins.digitalReadPin(Button >> 0) == 0) ? true : false
+        if (initflag == 0) pinInit()
+        return (pins.digitalReadPin(pinAssign[Button >> 0]) == 0) ? true : false
     }
     /**
      * TODO: ボタンが押されたとき
@@ -58,8 +87,8 @@ namespace Gamepad {
      */
     //% blockId=Gamepad_create_event block="on Button|%Button|Is %Event"
     export function onEvent(Button: GamepadButton, Event: GamepadEvents, handler: Action) {
-        if (initflag == 0) pininit()
-        control.onEvent(Button >> 0, Event >> 0, handler);
+        if (initflag == 0) pinInit()
+        control.onEvent(pinAssign[Button >> 0], Event >> 0, handler);
     }
     /**
      * TODO: ジョイスチックの位置を取り出す
@@ -96,7 +125,7 @@ namespace Gamepad {
         let lastJoystickY: number = JoyStick(GamepadJoystick.y)
         control.onEvent(JoystickEventId, axis, handler);
         if (initflag == 0) {
-            pininit();
+            pinInit();
             control.inBackground(() => {
                 while (true) {
                     const JoystickX = JoyStick(GamepadJoystick.x)
