@@ -34,31 +34,29 @@ enum GamepadJoystick {
 }
 //% weight=10 color=#0fbc11 icon="\uf11b" block="Gamepad"
 namespace gamepad {
-    let gamepadType=0   //0:origial, 1:joystick
-    let pinAssign:number[]
+    let gpType: number   //0:origial, 1:joystick
+    let pinAssign: number[]
     let initflag: number = 0
     let joystickStep = 128
 
     function pinInit(): void {
-        if(gamepadType==0){
-            pinAssign[0] = EventBusSource.MICROBIT_ID_IO_P13
-            pinAssign[1] = EventBusSource.MICROBIT_ID_IO_P15
-            pinAssign[2] = EventBusSource.MICROBIT_ID_IO_P8
-            pinAssign[3] = EventBusSource.MICROBIT_ID_IO_P12
-            pins.setEvents(DigitalPin.P8, PinEventType.Touch)
-            pins.setEvents(DigitalPin.P12, PinEventType.Touch)
-            pins.setEvents(DigitalPin.P13, PinEventType.Touch)
-            pins.setEvents(DigitalPin.P15, PinEventType.Touch)
-        } else{
-            pinAssign[0] = EventBusSource.MICROBIT_ID_IO_P13
-            pinAssign[1] = EventBusSource.MICROBIT_ID_IO_P12
-            pinAssign[2] = EventBusSource.MICROBIT_ID_IO_P15
-            pinAssign[3] = EventBusSource.MICROBIT_ID_IO_P14
-            pins.setEvents(DigitalPin.P12, PinEventType.Touch)
-            pins.setEvents(DigitalPin.P13, PinEventType.Touch)
-            pins.setEvents(DigitalPin.P14, PinEventType.Touch)
-            pins.setEvents(DigitalPin.P15, PinEventType.Touch)
+        if (gpType == Gamepadtype.joystick) {
+            pinAssign = []
+            pinAssign.push(DigitalPin.P13)
+            pinAssign.push(DigitalPin.P12)
+            pinAssign.push(DigitalPin.P15)
+            pinAssign.push(DigitalPin.P14)
+        } else {
+            pinAssign = []
+            pinAssign.push(DigitalPin.P13)
+            pinAssign.push(DigitalPin.P15)
+            pinAssign.push(DigitalPin.P8)
+            pinAssign.push(DigitalPin.P12)
         }
+        pins.setEvents(pinAssign[0], PinEventType.Touch)
+        pins.setEvents(pinAssign[1], PinEventType.Touch)
+        pins.setEvents(pinAssign[2], PinEventType.Touch)
+        pins.setEvents(pinAssign[3], PinEventType.Touch)
         initflag = 1
     }
     /**
@@ -67,7 +65,7 @@ namespace gamepad {
      */
     //% blockId=init gamepad block="init type=|%btype|"
     export function init(gtype: Gamepadtype): void {
-        gamepadType=gtype
+        gpType = gtype
         pinInit()
     }
     /**
