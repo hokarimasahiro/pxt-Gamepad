@@ -122,7 +122,7 @@ namespace gamepad {
      * TODO: ジョイスティックの遊びを設定する
      * @param play 遊び。, eg: 10
      */
-    //% blockId=Gamepad_set_zero_limit block="Set resolution to |%reso|"
+    //% blockId=Gamepad_set_play block="Set play to |%reso|"
     export function setPlay(play: number): void {
         joystickPlay = play >> 0
     }
