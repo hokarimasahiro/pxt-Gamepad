@@ -102,11 +102,11 @@ namespace gamepad {
         if (axis == GamepadJoystick.x) {
             let deg = pins.analogReadPin(AnalogPin.P1)
             if(Math.abs(deg - (1023 / 2)) < joystickPlay) return 0;
-            else return (deg - (1023 / 2)) >> 0;
+            else return (Math.trunc(deg - (1023 / 2))) >> 0;
         } else {
             let deg = pins.analogReadPin(AnalogPin.P2)
             if (Math.abs(deg - (1023 / 2)) < joystickPlay) return 0;
-            else return (deg - (1023 / 2)) >> 0;
+            else return (Math.trunc(deg - (1023 / 2))) >> 0;
         }
         return 0
     }
